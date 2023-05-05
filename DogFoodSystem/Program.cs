@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 
-namespace ChapaH_Assign1
+namespace DogFoodOrderingSystem
 {
     internal class Program
     {
