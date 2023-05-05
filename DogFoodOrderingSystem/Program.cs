@@ -11,23 +11,29 @@ namespace DogFoodOrderingSystem
     {
         static void Main(string[] args)
         {
-            DogFood dogFood1 = new DogFood("Purina", 2.67);
-            DogFood dogFood2 = new DogFood("Pedigree", 1.98);
-            DogFood dogFood3 = new DogFood("Ol'Roy", 1.47);
+            List<DogFood> DogFoodlist = new List<DogFood>();
 
-            GreetingMsg(dogFood1, dogFood2, dogFood3);
+            DogFood purina = new DogFood("Purina", 2.67);
+            DogFood pedigree = new DogFood("Pedigree", 1.98);
+            DogFood olRoy = new DogFood("Ol'Roy", 1.47);
 
-            UpdateNumCans(dogFood1);
-            UpdateNumCans(dogFood2);
-            UpdateNumCans(dogFood3);
+            DogFoodlist.Add(purina);
+            DogFoodlist.Add(pedigree);
+            DogFoodlist.Add(olRoy);
+
+            GreetingMsg(DogFoodlist);
+
+            foreach (DogFood eachBrand in DogFoodlist)
+            {
+                UpdateNumCans(eachBrand);
+            }
 
             WriteLine("\nThe number of cans for each brand name has been entered\n");
-            PerformAction(dogFood1, dogFood2, dogFood3);
+            PerformAction(DogFoodlist);
         }
 
-
         // Method for greeting
-        static void GreetingMsg(DogFood dogFood1, DogFood dogFood2, DogFood dogFood3)
+        static void GreetingMsg(List<DogFood> dogFoodList)
         {
             string asterikLine = new string('*', 86);
             WriteLine(asterikLine);
@@ -36,9 +42,11 @@ namespace DogFoodOrderingSystem
             WriteLine(asterikLine);
             WriteLine(asterikLine);
             WriteLine("*{0,61}{1,-23}*", "Dog Food Brands in stock given below", "");
-            WriteLine("*{0,50}: {1,-32:C2}*", "Can Unit Price for " + dogFood1.BrandName, dogFood1.CanUnitPrice);
-            WriteLine("*{0,50}: {1,-32:C2}*", "Can Unit Price for " + dogFood2.BrandName, dogFood2.CanUnitPrice);
-            WriteLine("*{0,50}: {1,-32:C2}*", "Can Unit Price for " + dogFood3.BrandName, dogFood3.CanUnitPrice);
+
+            foreach (DogFood eachBrand in dogFoodList)
+            {
+                WriteLine("*{0,50}: {1,-32:C2}*", "Can Unit Price for " + eachBrand.BrandName, eachBrand.CanUnitPrice);
+            }
             WriteLine(asterikLine);
             WriteLine("\nLet us begin by entering the umber of cans you need for each of these dog food brands...");
         }
@@ -47,6 +55,7 @@ namespace DogFoodOrderingSystem
         static void UpdateNumCans(DogFood dogFood)
         {
             string inputCans;
+
             Write("Enter the number of can for " + dogFood.BrandName + ": ");
             inputCans = ReadLine();
             // check the user input, it cannot be blank and 
@@ -58,10 +67,11 @@ namespace DogFoodOrderingSystem
             }
             // update new value at NumCans in DogFood object
             dogFood.NumCans = int.Parse(inputCans);
+
         }
 
         // Method for asking user to do choose the action
-        static void PerformAction(DogFood dogFood1, DogFood dogFood2, DogFood dogFood3)
+        static void PerformAction(List<DogFood> dogFoodList)
         {
             WriteLine("\nWhat would you like to do?"); // add 1 empty space for easier to read
             WriteLine("Press 1 for View Order");
@@ -83,11 +93,11 @@ namespace DogFoodOrderingSystem
             // check user option to provide a different path
             if (option == 1)
             {
-                ViewOrder(dogFood1, dogFood2, dogFood3);
+                ViewOrder(dogFoodList);
             }
             else if (option == 2)
             {
-                UpdateOrder(dogFood1, dogFood2, dogFood3);
+                UpdateOrder(dogFoodList);
             }
             else
             {
@@ -96,29 +106,32 @@ namespace DogFoodOrderingSystem
         }
 
         // Method for display summary order
-        static void ViewOrder(DogFood dogFood1, DogFood dogFood2, DogFood dogFood3)
+        static void ViewOrder(List<DogFood> dogFoodList)
         {
-            double totalAfterDiscount = ComputeOrderSummary(dogFood1, dogFood2, dogFood3, out double totalBeforeDiscount, out double discountAmount);
+            double totalAfterDiscount = ComputeOrderSummary(dogFoodList, out double totalBeforeDiscount, out double discountAmount);
             // totalAfterDiscount = (totalBeforeDiscount - discountAmount);
 
             // display output
             string asterikLine = new string('*', 86);
             WriteLine("\nYour dog food order\n");
             WriteLine(asterikLine);
-            WriteLine(dogFood1);
-            WriteLine(dogFood2);
-            WriteLine(dogFood3);
+
+            foreach (DogFood eachBrand in dogFoodList)
+            {
+                WriteLine(eachBrand);
+            }
+
             WriteLine("*{0,46}: {1,-36:C2}*", "Total price before discount", totalBeforeDiscount);
             WriteLine("*{0,46}: {1,-36:C2}*", "Discount", discountAmount);
             WriteLine("*{0,46}: {1,-36:C2}*", "Total price after discount", totalAfterDiscount);
             WriteLine(asterikLine);
-            PerformAction(dogFood1, dogFood2, dogFood3);
+            PerformAction(dogFoodList);
         }
 
         // Method for culculating total price
-        static double ComputeOrderSummary(DogFood dogFood1, DogFood dogFood2, DogFood dogFood3, out double totalBeforeDiscount, out double discountAmount)
+        static double ComputeOrderSummary(List<DogFood> dogFoodList, out double totalBeforeDiscount, out double discountAmount)
         {
-            totalBeforeDiscount = dogFood1.BrandTotal + dogFood2.BrandTotal + dogFood3.BrandTotal;
+            totalBeforeDiscount = dogFoodList[0].BrandTotal + dogFoodList[1].BrandTotal + dogFoodList[2].BrandTotal;
 
             // check if the total amount before discount exceed $75, then the customer gets 15% off
             if (totalBeforeDiscount >= 75)
@@ -135,17 +148,20 @@ namespace DogFoodOrderingSystem
         }
 
         // Method for updating order
-        static void UpdateOrder(DogFood dogFood1, DogFood dogFood2, DogFood dogFood3)
+        static void UpdateOrder(List<DogFood> dogFoodList)
         {
             WriteLine("\nUpdating your dog food order"); // add 1 empty space for easier to read
-            WriteLine("Press 1 to update number of cans for " + dogFood1.BrandName);
-            WriteLine("Press 2 to update number of cans for " + dogFood2.BrandName);
-            WriteLine("Press 3 to update number of cans for " + dogFood3.BrandName);
+
+            for (int index = 0; index < dogFoodList.Count; index++)
+            {
+                WriteLine("Press " + (index + 1) + " to update number of cans for " + dogFoodList[index].BrandName);
+            }
+
             Write("Enter the number (option 1, 2 or 3): ");
             string inputOption = ReadLine();
 
             // check the user input, it cannot be empty string and it should be number between 1 - 3  
-            while (!int.TryParse(inputOption, out int num) || num < 1 || num > 3)
+            while (!int.TryParse(inputOption, out int num) || num < 1 || num > dogFoodList.Count)
             {
                 Write("PLease re-enter the option 1, 2 or 3: ");
                 inputOption = ReadLine();
@@ -154,27 +170,12 @@ namespace DogFoodOrderingSystem
             // convert user input from string to int
             int option = int.Parse(inputOption);
 
-            // check the user option by if condition method
-            if (option == 1)
-            {
-                WriteLine("\n"); // add 1 empty space for easier to read
-                UpdateNumCans(dogFood1);
-                WriteLine("Great! Quantity for " + dogFood1.BrandName + " hase been updated to " + dogFood1.NumCans);
-            }
-            else if (option == 2)
-            {
-                WriteLine("\n"); // add 1 empty space for easier to read
-                UpdateNumCans(dogFood2);
-                WriteLine("Great! Quantity for " + dogFood2.BrandName + " hase been updated to " + dogFood2.NumCans);
-            }
-            else
-            {
-                WriteLine("\n"); // add 1 empty space for easier to read
-                UpdateNumCans(dogFood3);
-                WriteLine("Great! Quantity for " + dogFood1.BrandName + " hase been updated to " + dogFood3.NumCans);
-            }
-            PerformAction(dogFood1, dogFood2, dogFood3);
-        }
+            // Update the number of can
+            WriteLine("\n"); // add 1 empty space for easier to read
+            UpdateNumCans(dogFoodList[option - 1]);
+            WriteLine("Great! Quantity for " + dogFoodList[option - 1].BrandName + " hase been updated to " + dogFoodList[option - 1].NumCans);
 
+            PerformAction(dogFoodList);
+        }
     }
 }

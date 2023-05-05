@@ -10,8 +10,8 @@ namespace DogFoodOrderingSystem
     {
         // read-only properties
         public string BrandName { get; }
-
         public double CanUnitPrice { get; }
+
         // read-write property
         public int NumCans { get; set; }
 
@@ -41,6 +41,5 @@ namespace DogFoodOrderingSystem
             string outputString = String.Format("{0}\n{1}\n{2}\n{3}\n{4}", outputBrandName, outputUnitPrice, outputNumCans, outputBrandTotal, asterikLine);
             return outputString;
         }
-
     }
 }
