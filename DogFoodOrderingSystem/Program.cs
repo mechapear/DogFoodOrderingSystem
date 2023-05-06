@@ -101,7 +101,7 @@ namespace DogFoodOrderingSystem
             }
             else
             {
-                WriteLine("\nThank you for ordering the dog fodds with us. Good Bye!");
+                WriteLine("\nThank you for ordering the dog fodds with us. Good Bye!\n\n");
             }
         }
 
